@@ -18,27 +18,55 @@ export async function addResponseBtn() {
   // Ждём заданное время перед продолжением
   await delay(CONSTANTS.delayMs);
 
-  // Получаем список элементов навигации
-  const navItems = document.querySelectorAll(SELECTORS.naviItems);
+  // Создаем контейнер с фиксированной позицией
+  const stickyContainer = document.createElement('div');
+  stickyContainer.style.position = 'sticky';
+  stickyContainer.style.top = '90px';
+  stickyContainer.style.left = '20px';
+  stickyContainer.style.zIndex = '10000';
+  stickyContainer.style.background = '#fff';
+  stickyContainer.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+  stickyContainer.style.width = '130px';
+  stickyContainer.style.height = '0px';
+  stickyContainer.style.borderRadius = '10px';
 
-  // Клонируем 5-й элемент навигации
-  const clonedItem = navItems[4].cloneNode(true);
+  // Кнопка запуска
+  const button = document.createElement('button');
+  button.setAttribute('data-action', 'submit-responses');
+  button.textContent = 'Отправить отклики';
+  button.style.padding = '10px 20px';
+  button.style.fontSize = '14px';
+  button.style.cursor = 'pointer';
+  button.style.border = 'none';
+  button.style.borderRadius = '8px';
+  button.style.backgroundColor = '#000';
+  button.style.color = '#fff';
+  button.style.fontWeight = 'bold';
+  button.style.width = '100%';
+  button.style.marginBottom = '8px';
+  stickyContainer.appendChild(button);
 
-  // Находим текстовый элемент внутри склонированного элемента
-  const textElement = findElementByText(clonedItem);
+  // // Чекбокс блокировки
+  // const label = document.createElement('label');
+  // label.style.display = 'flex';
+  // label.style.alignItems = 'center';
+  // label.style.fontSize = '12px';
+  // label.style.cursor = 'pointer';
 
-  // Устанавливаем атрибут для назначения обработчика
-  textElement.setAttribute('data-action', 'submit-responses');
+  // const checkbox = document.createElement('input');
+  // checkbox.type = 'checkbox';
+  // checkbox.style.marginRight = '5px';
+  // checkbox.addEventListener('change', () => {
+  //   blockRedirects = checkbox.checked;
+  //   console.log(`🚫 Блокировка переходов: ${blockRedirects ? 'ВКЛ' : 'ВЫКЛ'}`);
+  // });
 
-  // Меняем текст кнопки
-  textElement.textContent = 'Отправить отклики';
+  // label.appendChild(checkbox);
+  // label.appendChild(document.createTextNode('Блок. переходов'));
+  // stickyContainer.appendChild(label);
 
-  // Вставляем склонированный элемент сразу после исходного
-  navItems[4].insertAdjacentElement('afterend', clonedItem);
+  // Добавляем контейнер в начало документа
+  document.body.prepend(stickyContainer);
 
-  // Ищем в клоне новую кнопку по атрибуту
-  const newButton = clonedItem.querySelector('[data-action="submit-responses"]');
-
-  // Навешиваем обработчик клика на новую кнопку
-  newButton.addEventListener('click', toggleResponseBtn);
+  button.addEventListener('click', toggleResponseBtn);
 }
